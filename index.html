@@ -1022,6 +1022,39 @@
         });
     }
 </script>
+<!-- Firebase Web SDK (CDN) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+  // إعدادات مشروعك في Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDGNWlqFYVu_Cq2cYrdQjD7u820gz-yilE",
+    authDomain: "school-grades-system-551ae.firebaseapp.com",
+    projectId: "school-grades-system-551ae",
+    storageBucket: "school-grades-system-551ae.firebasestorage.app",
+    messagingSenderId: "327304394262",
+    appId: "1:327304394262:web:7f2fed8966c9dc521ae737",
+    measurementId: "G-81GCKTP9Z0"
+  };
+
+  // تهيئة الاتصال بقاعدة البيانات
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // اختبرا الاتصال وقراءة بيانات الطالب التجريبي
+  async function testConnection() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "students"));
+      querySnapshot.forEach((doc) => {
+        console.log("تم الاتصال بنجاح! بيانات الطالب:", doc.data());
+      });
+    } catch (error) {
+      console.error("خطأ في الاتصال بقاعدة البيانات:", error);
+    }
+  }
+
+  testConnection();
+</script>
 </body>
 </html>
