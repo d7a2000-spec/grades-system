@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة درجات الطلبة - الأستاذ ضياء ياسر</title>
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary);
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
+        }
+
+        .system-header {
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .excel-bar {
+            background: #f8fafc;
+            padding: 6px 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border: 1px dashed var(--border-color);
+            font-size: 12px;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            font-size: 12px;
+        }
+
+        .form-control {
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 12px;
+            outline: none;
+            width: 100%;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .btn-success { background: var(--success); }
+        .btn-warning { background: #d97706; }
+        .btn-info { background: #0284c7; }
+        .btn-danger { background: var(--danger); }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .section-box {
+            background: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #334155;
+            border-right: 3px solid var(--accent);
+            padding-right: 6px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 3px 5px;
+            font-size: 11px;
+            text-align: right;
+        }
+
+        .data-table th {
+            background: #f1f5f9;
+            width: 38%;
+            color: var(--primary);
+        }
+
+        .data-table input, .data-table select {
+            border: none;
+            outline: none;
+            font-size: 11px;
+            background: transparent;
+            width: 100%;
+        }
+
+        .actions-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .grades-display-box {
+            background: #f1f5f9;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .grade-card {
+            background: white;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .grade-card label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #475569;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .grade-card input {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--accent);
+            text-align: center;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 3px;
+            padding: 3px;
+            width: 100%;
+        }
+
+        .bottom-results-container {
+            overflow-x: auto;
+            margin-top: 5px;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 11px;
+        }
+        .results-table th, .results-table td {
+            border: 1px solid var(--border-color);
+            padding: 4px 2px;
+        }
+        .results-table th {
+            background: #e2e8f0;
+            color: var(--primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 350px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 6px;
+        }
+        .modal-body label {
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+            margin-top: 8px;
+        }
+        .modal-footer {
+            margin-top: 15px;
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="system-header">نظام إدارة درجات الطلبة - الأستاذ ضياء ياسر</div>
+
+    <div class="excel-bar">
+        <span id="fileStatus" style="font-weight: bold; font-size: 12px; color: #16a34a;">🌐 متصل بالويب</span>
+        <button class="btn btn-success" style="padding: 3px 8px; font-size: 11px;" onclick="fetchDataFromCloud()">🔄 تحديث البيانات</button>
+    </div>
+
+    <div class="search-section">
+        <label style="font-weight: bold; font-size: 12px;">بحث (كود أو الاسم):</label>
+        <input type="text" id="searchBox" class="form-control" style="flex: 1;" placeholder="اكتب كود أو اسم الطالب ثم اضغط بحث...">
+        <button class="btn" style="padding: 4px 10px;" onclick="searchStudent()">بحث</button>
+    </div>
+
+    <div class="grid-layout">
+        <div class="section-box">
+            <div class="section-title">بيانات الطالب</div>
+            <table class="data-table">
+                <tbody>
+                    <tr>
+                        <th>كود الطالب</th>
+                        <td><input type="text" id="lblCode" readonly style="color: #64748b; font-weight: bold;"></td>
+                    </tr>
+                    <tr>
+                        <th>اسم الطالب</th>
+                        <td><input type="text" id="lblName" readonly style="color: #64748b; font-weight: bold;"></td>
+                    </tr>
+                    <tr>
+                        <th>الصف</th>
+                        <td><input type="text" id="lblClass" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>الشعبة</th>
+                        <td><input type="text" id="lblSection" readonly></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">إدخال الدرجة (مع الحدود المعتمدة)</div>
+            <table class="data-table">
+                <tbody>
+                    <tr>
+                        <th>المادة</th>
+                        <td>
+                            <select id="selectSubject" class="form-control" onchange="updateMaxLimit()">
+                                <option value="القواعد والإملاء">القواعد والإملاء</option>
+                                <option value="الإنشاء">الإنشاء</option>
+                                <option value="الادب والمطالعة">الادب والمطالعة</option>
+                                <option value="النشاط">النشاط</option>
+                                <option value="نصف السنة">نصف السنة</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>الشهر / الفصل</th>
+                        <td>
+                            <select id="selectMonth" class="form-control">
+                                <option value="الشهر الأول">الشهر الأول</option>
+                                <option value="الشهر الثاني">الشهر الثاني</option>
+                                <option value="الشهر الثالث">الشهر الثالث</option>
+                                <option value="الشهر الرابع">الشهر الرابع</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>الدرجة</th>
+                        <td><input type="number" id="inputGradeValue" class="form-control" placeholder="أدخل الدرجة..."></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="actions-panel">
+        <button class="btn btn-success" onclick="saveDirectGrade()">حفظ ورصد مباشر</button>
+        <button class="btn btn-info" onclick="displayStudentGrades()">عرض الدرجة</button>
+        <button class="btn btn-warning" onclick="openAttendanceModal()">تسجيل الحضور والغياب</button>
+        <button class="btn btn-info" style="background: #7c3aed;" onclick="openAttendanceReportModal()">📊 تقرير الغياب</button>
+        <button class="btn" style="background: #0284c7;" onclick="openAddStudentModal()">إضافة طالب</button>
+        <button class="btn btn-warning" onclick="openEditStudentModal()">تعديل معلومات الطالب</button>
+        <button class="btn btn-danger" onclick="deleteStudent()">حذف الطالب</button>
+        <button class="btn" style="background: #475569;" onclick="clearStudentFields()">فرغ الحقول</button>
+    </div>
+
+    <div class="grades-display-box">
+        <div style="font-weight: bold; font-size: 11px; color: #1e293b;">درجات المواد حسب الشهر المحدد:</div>
+        <div class="grades-grid">
+            <div class="grade-card">
+                <label>القواعد والإملاء</label>
+                <input type="text" id="displayGrammar" readonly value="">
+            </div>
+            <div class="grade-card">
+                <label>الإنشاء</label>
+                <input type="text" id="displayComposition" readonly value="">
+            </div>
+            <div class="grade-card">
+                <label>الادب والمطالعة</label>
+                <input type="text" id="displayLiterature" readonly value="">
+            </div>
+            <div class="grade-card">
+                <label>النشاط</label>
+                <input type="text" id="displayActivity" readonly value="">
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-title">درجات الطالب التفصيلية</div>
+        <div class="bottom-results-container">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>البيان</th>
+                        <th>الشهر الأول</th>
+                        <th>الشهر الثاني</th>
+                        <th>سعي الفصل الأول</th>
+                        <th>نصف السنة</th>
+                        <th>الشهر الثالث</th>
+                        <th>الشهر الرابع</th>
+                        <th>سعي الفصل الثاني</th>
+                        <th>السعي السنوي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; background: #f8fafc;">الإجمالي / الدرجة</td>
+                        <td id="tdMonth1"></td>
+                        <td id="tdMonth2"></td>
+                        <td id="tdTerm1Effort"></td>
+                        <td id="tdHalfYear"></td>
+                        <td id="tdMonth3"></td>
+                        <td id="tdMonth4"></td>
+                        <td id="tdTerm2Effort"></td>
+                        <td id="tdAnnualEffort"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إضافة طالب المنبثقة -->
+<div id="addStudentModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">إضافة طالب جديد</div>
+        <div class="modal-body">
+            <label>كود الطالب المقترح:</label>
+            <input type="text" id="newStudentCode" class="form-control" style="background: #f8fafc; font-weight: bold;">
+            
+            <label>اسم الطالب:</label>
+            <input type="text" id="newStudentName" class="form-control" placeholder="أدخل اسم الطالب الثلاثي...">
+            
+            <label>الشعبة المستهدفة:</label>
+            <select id="newStudentSection" class="form-control">
+                <option value="الشعبة أ">الشعبة أ</option>
+                <option value="الشعبة ب">الشعبة ب</option>
+                <option value="الشعبة ج">الشعبة ج</option>
+                <option value="الشعبة د">الشعبة د</option>
+                <option value="الشعبة هـ">الشعبة هـ</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="saveNewStudent()">حفظ وإضافة</button>
+            <button class="btn btn-danger" onclick="closeAddStudentModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة تسجيل الحضور والغياب المنبثقة -->
+<div id="attendanceModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">تسجيل الحضور والغياب</div>
+        <div class="modal-body">
+            <label>التاريخ:</label>
+            <input type="date" id="attendanceDate" class="form-control">
+            
+            <label>الحالة:</label>
+            <select id="attendanceStatus" class="form-control">
+                <option value="حاضر">حاضر</option>
+                <option value="غائب">غائب</option>
+                <option value="إجازة">إجازة</option>
+                <option value="تأخير">تأخير</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="saveAttendance()">حفظ الحضور</button>
+            <button class="btn btn-danger" onclick="closeAttendanceModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة تقرير الغياب المفصل المنبثقة -->
+<div id="attendanceReportModal" class="modal">
+    <div class="modal-content" style="width: 500px; max-width: 95%;">
+        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>📋 تقرير الحضور والغياب المفصل</span>
+            <button class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;" onclick="closeAttendanceReportModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="reportStudentInfo" style="font-size: 12px; font-weight: bold; margin-bottom: 8px; color: #334155;"></div>
+            <div style="max-height: 250px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 4px;">
+                <table class="results-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceReportTableBody">
+                        <tr><td colspan="2" style="padding: 10px; color: #64748b;">جاري جلب البيانات...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="attendanceSummary" style="margin-top: 8px; font-size: 11px; font-weight: bold; color: #1e293b; background: #f8fafc; padding: 6px; border-radius: 4px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info" onclick="printAttendanceReport()">🖨️ طباعة التقرير</button>
+            <button class="btn btn-danger" onclick="closeAttendanceReportModal()">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة تعديل معلومات الطالب المنبثقة -->
+<div id="editStudentModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">تعديل معلومات الطالب أو نقله</div>
+        <div class="modal-body">
+            <label>كود الطالب:</label>
+            <input type="text" id="editStudentCode" class="form-control" style="background: #f8fafc; font-weight: bold;" readonly>
+            
+            <label>اسم الطالب:</label>
+            <input type="text" id="editStudentName" class="form-control">
+            
+            <label>الشعبة الحالية / الجديدة:</label>
+            <select id="editStudentSection" class="form-control">
+                <option value="الشعبة أ">الشعبة أ</option>
+                <option value="الشعبة ب">الشعبة ب</option>
+                <option value="الشعبة ج">الشعبة ج</option>
+                <option value="الشعبة د">الشعبة د</option>
+                <option value="الشعبة هـ">الشعبة هـ</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="submitEditStudent()">حفظ التعديلات</button>
+            <button class="btn btn-danger" onclick="closeEditStudentModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let globalData = [];
+    let currentStudentIndex = -1;
+    
+    // تم تحديث رابط النشر الجديد
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwFceLoGl_86wxbiGx7f6zkwbBjVTkQNoe2hjKhSnFBMZZMTBzABqYdDzfJsEMn49JVkw/exec";
+    
+    window.onload = function() {
+        document.getElementById('searchBox').focus();
+
+        document.getElementById('searchBox').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchStudent();
+            }
+        });
+
+        document.getElementById('inputGradeValue').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveDirectGrade();
+            }
+        });
+        
+        fetchDataFromCloud();
+    };
+
+    function fetchDataFromCloud() {
+        document.getElementById('fileStatus').innerText = "⏳ جاري مزامنة البيانات من كافة الأوراق...";
+        
+        fetch(WEB_APP_URL)
+            .then(response => response.json())
+            .then(data => {
+                globalData = data;
+                document.getElementById('fileStatus').innerText = `🌐 متصل بالويب - تم جلب (${data.length}) سجل بنجاح`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('fileStatus').innerText = "❌ فشل الاتصال بالخادم";
+            });
+    }
+
+    function updateMaxLimit() {
+        const subject = document.getElementById('selectSubject').value;
+        const monthSelect = document.getElementById('selectMonth');
+        if (subject === "نصف السنة") {
+            monthSelect.value = "الشهر الأول";
+            monthSelect.disabled = true;
+        } else {
+            monthSelect.disabled = false;
+        }
+    }
+
+    function clearStudentFields() {
+        currentStudentIndex = -1;
+        document.getElementById('searchBox').value = '';
+        document.getElementById('lblCode').value = '';
+        document.getElementById('lblName').value = '';
+        document.getElementById('lblClass').value = '';
+        document.getElementById('lblSection').value = '';
+        document.getElementById('inputGradeValue').value = '';
+        
+        document.getElementById('displayGrammar').value = '';
+        document.getElementById('displayComposition').value = '';
+        document.getElementById('displayLiterature').value = '';
+        document.getElementById('displayActivity').value = '';
+
+        document.getElementById('tdMonth1').innerText = '';
+        document.getElementById('tdMonth2').innerText = '';
+        document.getElementById('tdTerm1Effort').innerText = '';
+        document.getElementById('tdHalfYear').innerText = '';
+        document.getElementById('tdMonth3').innerText = '';
+        document.getElementById('tdMonth4').innerText = '';
+        document.getElementById('tdTerm2Effort').innerText = '';
+        document.getElementById('tdAnnualEffort').innerText = '';
+
+        document.getElementById('searchBox').focus();
+    }
+
+    function searchStudent() {
+        const query = document.getElementById('searchBox').value.trim().toLowerCase();
+        if (!query) {
+            alert("يرجى إدخال كود الطالب أو اسمه للبحث!");
+            return;
+        }
+
+        currentStudentIndex = globalData.findIndex(s => {
+            const code = String(s['كود الطالب'] || '').toLowerCase().trim();
+            const name = String(s['اسم الطالب'] || '').toLowerCase().trim();
+            return code === query || name.includes(query);
+        });
+
+        if (currentStudentIndex !== -1) {
+            let s = globalData[currentStudentIndex];
+            
+            document.getElementById('lblCode').value = s['كود الطالب'] || '';
+            document.getElementById('lblName').value = s['اسم الطالب'] || '';
+            document.getElementById('lblClass').value = s['الصف'] || '';
+            document.getElementById('lblSection').value = s['الشعبة'] || '';
+            
+            displayStudentGradesValues(s);
+
+            document.getElementById('inputGradeValue').focus();
+            document.getElementById('inputGradeValue').select();
+        } else {
+            alert(`عذراً، لم يتم العثور على الطالب (${query}) في السحابة!`);
+            clearStudentFields();
+        }
+    }
+
+    function displayStudentGradesValues(s) {
+        const selectedMonth = document.getElementById('selectMonth').value;
+
+        const cleanVal = (val) => (val !== null && val !== undefined && val !== '' && !isNaN(val)) ? val : '';
+
+        if (selectedMonth === "الشهر الأول") {
+            document.getElementById('displayGrammar').value = cleanVal(s['قواعد_1']);
+            document.getElementById('displayComposition').value = cleanVal(s['انشاء_1']);
+            document.getElementById('displayLiterature').value = cleanVal(s['ادب_1']);
+            document.getElementById('displayActivity').value = cleanVal(s['نشاط_1']);
+        } else if (selectedMonth === "الشهر الثاني") {
+            document.getElementById('displayGrammar').value = cleanVal(s['قواعد_2']);
+            document.getElementById('displayComposition').value = cleanVal(s['انشاء_2']);
+            document.getElementById('displayLiterature').value = cleanVal(s['ادب_2']);
+            document.getElementById('displayActivity').value = cleanVal(s['نشاط_2']);
+        } else if (selectedMonth === "الشهر الثالث") {
+            document.getElementById('displayGrammar').value = cleanVal(s['قواعد_3']);
+            document.getElementById('displayComposition').value = cleanVal(s['انشاء_3']);
+            document.getElementById('displayLiterature').value = cleanVal(s['ادب_3']);
+            document.getElementById('displayActivity').value = cleanVal(s['نشاط_3']);
+        } else if (selectedMonth === "الشهر الرابع") {
+            document.getElementById('displayGrammar').value = cleanVal(s['قواعد_4']);
+            document.getElementById('displayComposition').value = cleanVal(s['انشاء_4']);
+            document.getElementById('displayLiterature').value = cleanVal(s['ادب_4']);
+            document.getElementById('displayActivity').value = cleanVal(s['نشاط_4']);
+        }
+
+        document.getElementById('tdMonth1').innerText = cleanVal(s['الشهر الأول']);
+        document.getElementById('tdMonth2').innerText = cleanVal(s['الشهر الثاني']);
+        document.getElementById('tdTerm1Effort').innerText = cleanVal(s['سعي الفصل الأول']);
+        document.getElementById('tdHalfYear').innerText = cleanVal(s['نصف السنة']);
+        document.getElementById('tdMonth3').innerText = cleanVal(s['الشهر الثالث']);
+        document.getElementById('tdMonth4').innerText = cleanVal(s['الشهر الرابع']);
+        document.getElementById('tdTerm2Effort').innerText = cleanVal(s['سعي الفصل الثاني']);
+        document.getElementById('tdAnnualEffort').innerText = cleanVal(s['السعي السنوي']);
+    }
+
+    function displayStudentGrades() {
+        if (currentStudentIndex === -1) {
+            alert("يرجى البحث عن الطالب واختياره أولاً لعرض درجاته!");
+            return;
+        }
+        let s = globalData[currentStudentIndex];
+        displayStudentGradesValues(s);
+        alert("تم عرض درجات الشهر والمواد والجدول التفصيلي بنجاح!");
+    }
+
+    function postData(payload) {
+        return fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(payload)
+        }).then(res => res.json());
+    }
+
+    function saveDirectGrade() {
+        if (currentStudentIndex === -1) {
+            alert("يرجى البحث عن الطالب واختياره أولاً قبل حفظ الدرجة!");
+            return;
+        }
+
+        const gradeValInput = document.getElementById('inputGradeValue').value;
+        const selectedSubject = document.getElementById('selectSubject').value;
+        const selectedMonth = document.getElementById('selectMonth').value;
+
+        if (gradeValInput === "") {
+            alert("يرجى إدخال قيمة الدرجة!");
+            return;
+        }
+
+        const gradeVal = parseFloat(gradeValInput);
+
+        let maxLimit = 100;
+        if (selectedSubject === "القواعد والإملاء") {
+            maxLimit = 45;
+        } else if (selectedSubject === "الإنشاء") {
+            maxLimit = 25;
+        } else if (selectedSubject === "الادب والمطالعة") {
+            maxLimit = 30;
+        } else if (selectedSubject === "النشاط") {
+            maxLimit = 100;
+        } else if (selectedSubject === "نصف السنة") {
+            maxLimit = 100;
+        }
+
+        if (gradeVal > maxLimit) {
+            alert("عذراً، الدرجة المدخلة (" + gradeVal + ") تتجاوز الحد الأعلى المسموح لمادة (" + selectedSubject + ") وهو (" + maxLimit + ")!");
+            return;
+        }
+
+        let s = globalData[currentStudentIndex];
+
+        let existingGrade = 0;
+        let fieldKey = "";
+        if (selectedSubject === "نصف السنة") {
+            existingGrade = s['نصف_السنة'] || 0;
+            fieldKey = 'نصف_السنة';
+        } else {
+            let keyMap = { "القواعد والإملاء": "قواعد", "الإنشاء": "انشاء", "الادب والمطالعة": "ادب", "النشاط": "نشاط" };
+            let monthMap = { "الشهر الأول": "_1", "الشهر الثاني": "_2", "الشهر الثالث": "_3", "الشهر الرابع": "_4" };
+            fieldKey = (keyMap[selectedSubject] || "") + (monthMap[selectedMonth] || "");
+            existingGrade = s[fieldKey] || 0;
+        }
+
+        if (existingGrade !== null && existingGrade !== undefined && String(existingGrade).trim() !== "" && Number(existingGrade) !== 0 && existingGrade !== 1) {
+            let confirmMsg = `توجد درجة مسجلة مسبقاً لهذه المادة:\n\nالدرجة القديمة: (${existingGrade})\nالدرجة الجديدة: (${gradeVal})\n\nهل تريد استبدال الدرجة؟`;
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+        }
+
+        document.getElementById('fileStatus').innerText = "⏳ جاري حفظ وتحديث الدرجة في السيرفر...";
+
+        postData({
+            action: "saveGrade",
+            sheetName: s['__sheetName'],
+            rowIndex: s['__rowIndex'],
+            subject: selectedSubject,
+            month: selectedMonth,
+            gradeVal: gradeVal
+        })
+        .then(result => {
+            if (result.success || result.status === "success") {
+                s[fieldKey] = gradeVal;
+                if (result.updatedMonthlyScore !== undefined && selectedSubject !== "نصف السنة") {
+                    s[selectedMonth] = result.updatedMonthlyScore;
+                }
+                if (result.updatedTerm1Effort !== undefined) s['سعي الفصل الأول'] = result.updatedTerm1Effort;
+                if (result.updatedTerm2Effort !== undefined) s['سعي الفصل الثاني'] = result.updatedTerm2Effort;
+                if (result.updatedAnnualEffort !== undefined) s['السعي السنوي'] = result.updatedAnnualEffort;
+
+                displayStudentGradesValues(s);
+                document.getElementById('fileStatus').innerText = "🌐 متصل بالويب - تم حفظ وتحديث الدرجة بنجاح";
+                
+                clearStudentFields();
+            } else {
+                alert("حدث خطأ أثناء الحفظ: " + (result.message || "خطأ غير معروف"));
+                document.getElementById('fileStatus').innerText = "❌ فشل حفظ الدرجة";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("فشل الاتصال بالخادم أثناء عملية الحفظ!");
+            document.getElementById('fileStatus').innerText = "❌ خطأ في الاتصال";
+        });
+    }
+
+    function openAttendanceModal() {
+        if (currentStudentIndex === -1) {
+            alert("يرجى البحث عن الطالب واختياره أولاً لتسجيل الحضور والغياب!");
+            return;
+        }
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('attendanceDate').value = today;
+        document.getElementById('attendanceStatus').value = "حاضر";
+        document.getElementById('attendanceModal').style.display = 'flex';
+    }
+
+    function closeAttendanceModal() {
+        document.getElementById('attendanceModal').style.display = 'none';
+    }
+
+    function saveAttendance() {
+        if (currentStudentIndex === -1) return;
+
+        let s = globalData[currentStudentIndex];
+        const dateVal = document.getElementById('attendanceDate').value;
+        const statusVal = document.getElementById('attendanceStatus').value;
+
+        if (!dateVal) {
+            alert("يرجى تحديد التاريخ!");
+            return;
+        }
+
+        document.getElementById('fileStatus').innerText = "⏳ جاري حفظ بيانات الحضور والغياب...";
+
+        postData({
+            action: "saveAttendance",
+            sheetName: s['__sheetName'],
+            rowIndex: s['__rowIndex'],
+            studentCode: s['كود الطالب'],
+            studentName: s['اسم الطالب'],
+            date: dateVal,
+            status: statusVal
+        })
+        .then(result => {
+            if (result.success || result.status === "success") {
+                alert(result.message || "تم تسجيل الحضور والغياب بنجاح!");
+                closeAttendanceModal();
+                document.getElementById('fileStatus').innerText = "🌐 متصل بالويب - تم حفظ الحضور بنجاح";
+            } else {
+                alert(result.message || "حدث خطأ أثناء حفظ الحضور.");
+                document.getElementById('fileStatus').innerText = "❌ فشل حفظ الحضور";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("فشل الاتصال بالخادم أثناء حفظ الحضور!");
+            document.getElementById('fileStatus').innerText = "❌ خطأ في الاتصال";
+        });
+    }
+
+    function openAttendanceReportModal() {
+        if (currentStudentIndex === -1) {
+            alert("يرجى البحث عن الطالب واختياره أولاً لعرض تقرير الغياب!");
+            return;
+        }
+
+        let s = globalData[currentStudentIndex];
+        document.getElementById('reportStudentInfo').innerText = `الطالب: ${s['اسم الطالب']} (الكود: ${s['كود الطالب']})`;
+        document.getElementById('attendanceReportTableBody').innerHTML = `<tr><td colspan="2" style="padding: 10px; color: #64748b;">⏳ جاري جلب سجل الغياب من السيرفر...</td></tr>`;
+        document.getElementById('attendanceSummary').innerText = "";
+        document.getElementById('attendanceReportModal').style.display = 'flex';
+
+        postData({
+            action: "getAttendanceReport",
+            studentCode: s['كود الطالب']
+        })
+        .then(data => {
+            let tbody = document.getElementById('attendanceReportTableBody');
+            tbody.innerHTML = "";
+            if (data && data.records && data.records.length > 0) {
+                let presentCount = 0;
+                let absentCount = 0;
+                let leaveCount = 0;
+                let lateCount = 0;
+
+                data.records.forEach(r => {
+                    if (r.status === "حاضر") presentCount++;
+                    else if (r.status === "غائب") absentCount++;
+                    else if (r.status === "إجازة") leaveCount++;
+                    else if (r.status === "تأخير") lateCount++;
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${r.date}</td><td style="font-weight: bold; color: ${r.status === 'حاضر' ? '#16a34a' : (r.status === 'غائب' ? '#dc2626' : '#d97706')}">${r.status}</td>`;
+                    tbody.appendChild(tr);
+                });
+                document.getElementById('attendanceSummary').innerText = `إجمالي الحضور: ${presentCount} | الغياب: ${absentCount} | الإجازات: ${leaveCount} | التأخيرات: ${lateCount}`;
+            } else {
+                tbody.innerHTML = `<tr><td colspan="2" style="padding: 10px; color: #64748b;">لا توجد سجلات حضور مسجلة لهذا الطالب حتى الآن.</td></tr>`;
+                document.getElementById('attendanceSummary').innerText = "إجمالي الحضور: 0 | الغياب: 0";
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('attendanceReportTableBody').innerHTML = `<tr><td colspan="2" style="padding: 10px; color: #dc2626;">فشل جلب تقرير الحضور من السيرفر.</td></tr>`;
+        });
+    }
+
+    function closeAttendanceReportModal() {
+        document.getElementById('attendanceReportModal').style.display = 'none';
+    }
+
+    function printAttendanceReport() {
+        window.print();
+    }
+
+    function openAddStudentModal() {
+        let maxCode = 1001;
+        if (globalData.length > 0) {
+            let codes = globalData.map(s => parseInt(s['كود الطالب']) || 0);
+            maxCode = Math.max(...codes, 1000) + 1;
+        }
+        document.getElementById('newStudentCode').value = maxCode;
+        document.getElementById('newStudentName').value = '';
+        document.getElementById('newStudentSection').value = 'الشعبة أ';
+        document.getElementById('addStudentModal').style.display = 'flex';
+    }
+
+    function closeAddStudentModal() {
+        document.getElementById('addStudentModal').style.display = 'none';
+    }
+
+    function saveNewStudent() {
+        const code = document.getElementById('newStudentCode').value;
+        const name = document.getElementById('newStudentName').value.trim();
+        const section = document.getElementById('newStudentSection').value;
+
+        if (!name) {
+            alert("يرجى إدخال اسم الطالب!");
+            return;
+        }
+
+        document.getElementById('fileStatus').innerText = "⏳ جاري إضافة الطالب الجديد للسيرفر...";
+
+        postData({
+            action: "addStudent",
+            studentCode: code,
+            studentName: name,
+            targetSheetName: section
+        })
+        .then(result => {
+            if (result.success || result.status === "success") {
+                alert("تم إضافة الطالب بنجاح!");
+                closeAddStudentModal();
+                fetchDataFromCloud();
+            } else {
+                alert("حدث خطأ أثناء إضافة الطالب: " + (result.message || ""));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("خطأ في الاتصال أثناء إضافة الطالب.");
+        });
+    }
+
+    function openEditStudentModal() {
+        if (currentStudentIndex === -1) {
+            alert("يرجى البحث عن الطالب واختياره أولاً للتعديل أو النقل!");
+            return;
+        }
+        let s = globalData[currentStudentIndex];
+        document.getElementById('editStudentCode').value = s['كود الطالب'] || '';
+        document.getElementById('editStudentName').value = s['اسم الطالب'] || '';
+        document.getElementById('editStudentSection').value = s['الشعبة'] || 'الشعبة أ';
+        document.getElementById('editStudentModal').style.display = 'flex';
+    }
+
+    function closeEditStudentModal() {
+        document.getElementById('editStudentModal').style.display = 'none';
+    }
+
+    function submitEditStudent() {
+        if (currentStudentIndex === -1) return;
+        let s = globalData[currentStudentIndex];
+        const newCode = document.getElementById('editStudentCode').value.trim();
+        const newName = document.getElementById('editStudentName').value.trim();
+        const newSection = document.getElementById('editStudentSection').value;
+
+        if (!newName || !newCode) {
+            alert("كود الطالب واسمه لا يمكن أن يكونا فارغين!");
+            return;
+        }
+
+        document.getElementById('fileStatus').innerText = "⏳ جاري تحديث ونقل بيانات الطالب...";
+
+        postData({
+            action: "updateStudent",
+            oldSheetName: s['__sheetName'],
+            oldRowIndex: s['__rowIndex'],
+            studentCode: newCode,
+            studentName: newName,
+            newSheetName: newSection,
+            grades: {
+                'قواعد_1': s['قواعد_1'], 'انشاء_1': s['انشاء_1'], 'ادب_1': s['ادب_1'], 'نشاط_1': s['نشاط_1'],
+                'قواعد_2': s['قواعد_2'], 'انشاء_2': s['انشاء_2'], 'ادب_2': s['ادب_2'], 'نشاط_2': s['نشاط_2'],
+                'نصف_السنة': s['نصف_السنة'],
+                'قواعد_3': s['قواعد_3'], 'انشاء_3': s['انشاء_3'], 'ادب_3': s['ادب_3'], 'نشاط_3': s['نشاط_3'],
+                'قواعد_4': s['قواعد_4'], 'انشاء_4': s['انشاء_4'], 'ادب_4': s['ادب_4'], 'نشاط_4': s['نشاط_4']
+            }
+        })
+        .then(result => {
+            if (result.success || result.status === "success") {
+                alert(result.message || "تم تحديث بيانات الطالب بنجاح!");
+                closeEditStudentModal();
+                clearStudentFields();
+                fetchDataFromCloud();
+            } else {
+                alert("خطأ أثناء التعديل: " + (result.message || ""));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("فشل الاتصال بالخادم.");
+        });
+    }
+
+    function deleteStudent() {
+        if (currentStudentIndex === -1) {
+            alert("يرجى البحث عن الطالب واختياره أولاً لحذفه!");
+            return;
+        }
+        let s = globalData[currentStudentIndex];
+        if (!confirm(`هل أنت متأكد من حذف الطالب (${s['اسم الطالب']}) نهائياً من السجل؟`)) {
+            return;
+        }
+
+        document.getElementById('fileStatus').innerText = "⏳ جاري حذف الطالب من السيرفر...";
+
+        postData({
+            action: "deleteStudent",
+            sheetName: s['__sheetName'],
+            rowIndex: s['__rowIndex'],
+            studentCode: s['كود الطالب']
+        })
+        .then(result => {
+            if (result.success || result.status === "success") {
+                alert("تم حذف الطالب بنجاح!");
+                clearStudentFields();
+                fetchDataFromCloud();
+            } else {
+                alert("فشل حذف الطالب: " + (result.message || ""));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("خطأ في الاتصال بالسيرفر.");
+        });
+    }
+</script>
+
+</body>
+</html>
